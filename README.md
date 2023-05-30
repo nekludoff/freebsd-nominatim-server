@@ -1,2 +1,2 @@
 # freebsd-nominatim-server
-Schell scripts to install nominatim server on FreeBSD 13.2 
+Schell scripts to install Nominatim server on FreeBSD 13.2 
