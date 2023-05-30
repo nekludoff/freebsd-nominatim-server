@@ -54,6 +54,7 @@ service postgresql start
 service postgresql restart
 
 su - postgres -c "createuser nominatim"
+su - postgres -c "createuser www-data"
 su - postgres -c "psql -c 'ALTER ROLE nominatim WITH SUPERUSER;'"
 su - postgres -c "dropdb nominatim"
 cd /
@@ -106,8 +107,6 @@ chown -R nominatim:nominatim /home/nominatim
 
 su - nominatim -c "cd /home/nominatim/nominatim-project; nominatim import --osm-file /home/nominatim/Nominatim-4.2.3/data/andorra-latest.osm.pbf 2>&1 | tee setup.log"
 
-mkdir /usr/local/etc/nginx/conf.d
-
 mkdir /var/log/nginx
 chown -R nominatim:nominatim /var/log/nginx
 
@@ -120,7 +119,7 @@ chown -R nominatim:nominatim /usr/local/etc/nginx
 service nginx restart
 
 
-rm -r -f /usr/local/etc/php-fpm/*
-cp -r -f /root/freebsd-nominatim-server/conf/php-fpm/* /usr/local/etc/php-fpm
+rm -r -f /usr/local/etc/php-fpm.d/*
+cp -r -f /root/freebsd-nominatim-server/conf/php-fpm/* /usr/local/etc/php-fpm.d/
 chown -R nominatim:nominatim /usr/local/etc/php-fpm
 service php-fpm restart
