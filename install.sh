@@ -24,26 +24,6 @@ pkg install -y png tiff proj icu freetype2 cairomm pkgconf libtool libltdl py39-
 pkg install -y libosmium icu py39-pyicu icu-le-hb harfbuzz-icu py39-pycapsicum py39-datrie libdatrie autoconf
 ln -s /usr/local/bin/python3.9 /usr/local/bin/python
 ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
-pkg install -y nginx
-pkg install -y php80 php80-bcmath php80-mbstring php80-bz2 php80-calendar php80-ctype php80-curl php80-dom php80-enchant
-pkg install -y php80-exif php80-ffi php80-fileinfo php80-filter php80-ftp php80-gd php80-gettext php80-gmp php80-iconv
-pkg install -y php80-intl php80-opcache php80-pcntl php80-pdo php80-pdo_sqlite php80-phar
-pkg install -y php80-posix php80-pspell php80-readline php80-session php80-shmop php80-simplexml php80-sockets php80-sodium
-pkg install -y php80-sqlite3 php80-sysvmsg php80-sysvsem php80-sysvshm php80-tidy php80-tokenizer php80-xml php80-xmlreader
-pkg install -y php80-xmlwriter php80-xsl php80-zip php80-zlib php80-pecl-igbinary
-pkg install -y autoconf
-
-cd /usr/ports/databases/php80-pdo_pgsql
-make reinstall clean
-cd /usr/ports/databases/php80-pgsql
-make reinstall clean
-
-cd /
-
-sysrc nginx_enable="YES"
-service nginx start
-sysrc php_fpm_enable="YES"
-service php-fpm start
 
 cd /root
 git clone https://github.com/nekludoff/freebsd-osm-tile-server.git
@@ -76,6 +56,27 @@ service postgresql restart
 su - postgres -c "createuser nominatim"
 su - postgres -c "psql -c 'ALTER ROLE nominatim WITH SUPERUSER;'"
 su - postgres -c "dropdb nominatim"
+cd /
+
+pkg install -y nginx
+pkg install -y php80 php80-bcmath php80-mbstring php80-bz2 php80-calendar php80-ctype php80-curl php80-dom php80-enchant
+pkg install -y php80-exif php80-ffi php80-fileinfo php80-filter php80-ftp php80-gd php80-gettext php80-gmp php80-iconv
+pkg install -y php80-intl php80-opcache php80-pcntl php80-pdo php80-pdo_sqlite php80-phar
+pkg install -y php80-posix php80-pspell php80-readline php80-session php80-shmop php80-simplexml php80-sockets php80-sodium
+pkg install -y php80-sqlite3 php80-sysvmsg php80-sysvsem php80-sysvshm php80-tidy php80-tokenizer php80-xml php80-xmlreader
+pkg install -y php80-xmlwriter php80-xsl php80-zip php80-zlib php80-pecl-igbinary
+pkg install -y autoconf
+
+sysrc nginx_enable="YES"
+service nginx start
+sysrc php_fpm_enable="YES"
+service php-fpm start
+
+cd /usr/ports/databases/php80-pdo_pgsql
+make reinstall clean
+cd /usr/ports/databases/php80-pgsql
+make reinstall clean
+
 cd /
 
 mkdir /home
@@ -123,16 +124,3 @@ rm -r -f /usr/local/etc/php-fpm/*
 cp -r -f /root/freebsd-nominatim-server/conf/php-fpm/* /usr/local/etc/php-fpm
 chown -R nominatim:nominatim /usr/local/etc/php-fpm
 service php-fpm restart
-
-wget http://localhost/search?street=Охотный%20ряд,%201
-
-
-zfs snapshot -r zroot@one
-
-#!/bin/sh
-VM_LIST=`zfs list -t snapshot -r zroot | grep -v 'NAME' | grep ' ' | awk '{print $1}'`
-for ACTIVEVM in $VM_LIST
-do
-  zfs rollback $ACTIVEVM
-  zfs destroy $ACTIVEVM
-done
