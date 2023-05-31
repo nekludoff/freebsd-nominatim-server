@@ -1,62 +1,13 @@
 #!/bin/sh
 cd /
 
-zfs destroy -r zroot/pgdb
-zfs create -o mountpoint=/pgdb zroot/pgdb
-zfs create -o mountpoint=/pgdb/data zroot/pgdb/data
-cd /pgdb/data
-mkdir 15
-zfs set recordsize=32k zroot/pgdb/data
-zfs create -o mountpoint=/pgdb/wal zroot/pgdb/wal
-cd /pgdb/wal
-mkdir 15
-zfs set recordsize=64k zroot/pgdb/wal
-zfs set compression=lz4 zroot/pgdb
-zfs set atime=off zroot/pgdb
-zfs set xattr=sa zroot/pgdb
-zfs set logbias=latency zroot/pgdb
-zfs set redundant_metadata=most zroot/pgdb
-
-pkg install -y git sudo wget npm nano
-pkg install -y llvm15 lua54 
-pkg install -y mc nano bash apache24 boost-all cairo ceph14 cmake coreutils curl freetype2 glib gmake harfbuzz icu iniparser libjpeg-turbo libmemcached png proj python39 sqlite3 tiff webp zlib-ng bzip
-pkg install -y png tiff proj icu freetype2 cairomm pkgconf libtool libltdl py39-pip py39-python-dotenv py39-psutil py39-Jinja2
+pkg install -y py39-pip py39-python-dotenv py39-psutil py39-Jinja2
 pkg install -y libosmium icu py39-pyicu icu-le-hb harfbuzz-icu py39-pycapsicum py39-datrie libdatrie autoconf
-ln -s /usr/local/bin/python3.9 /usr/local/bin/python
-ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
-
-cd /root
-git clone https://github.com/nekludoff/freebsd-osm-tile-server.git
-cd freebsd-osm-tile-server/Postgresql-15
-
-pkg install -y postgresql15-client-15.3.pkg
-pkg install -y py39-psycopg-c-3.1.9.pkg
-pkg install -y py39-psycopg-3.1.9.pkg
-pkg install -y py39-psycopg2-2.9.6.pkg
-pkg install -y py39-psycopg2cffi-2.9.0.pkg
-pkg install -y postgresql15-contrib-15.3.pkg
-pkg install -y sfcgal-1.4.1_4.pkg
-pkg install -y gdal-3.6.4_1.pkg
-pkg install -y postgresql15-server-15.3.pkg
-pkg install -y postgis33-3.3.2_4.pkg
-chown -R postgres:postgres /pgdb
-
-sysrc postgresql_enable="YES"
-cp -f postgresql /usr/local/etc/rc.d/postgresql
-chmod 755 /usr/local/etc/rc.d/postgresql
-/usr/local/etc/rc.d/postgresql initdb
-mv -f /pgdb/data/15/pg_wal /pgdb/wal/15
-ln -s /pgdb/wal/15/pg_wal /pgdb/data/15/pg_wal
-cp -f pg_hba.conf /pgdb/data/15/pg_hba.conf
-cp -f postgresql.conf /pgdb/data/15/postgresql.conf
-service postgresql start
-service postgresql restart
 
 su - postgres -c "createuser nominatim"
 su - postgres -c "psql -c 'ALTER ROLE nominatim WITH SUPERUSER;'"
 su - postgres -c "createuser www-data"
 su - postgres -c "dropdb nominatim"
-cd /
 
 pkg install -y nginx
 pkg install -y php80 php80-bcmath php80-mbstring php80-bz2 php80-calendar php80-ctype php80-curl php80-dom php80-enchant
@@ -95,9 +46,10 @@ wget -O data/country_osm_grid.sql.gz https://www.nominatim.org/data/country_grid
 wget -O data/andorra-latest.osm.pbf https://download.geofabrik.de/europe/andorra-latest.osm.pbf
 mkdir /home/nominatim/build
 cd /home/nominatim/build
-cmake /home/nominatim/Nominatim-4.2.3
+cmake -DBUILD_OSM2PGSQL=off /home/nominatim/Nominatim-4.2.3
 gmake
 gmake install
+ln -s /usr/local/bin/osm2pgsql /usr/local/lib/nominatim/osm2pgsql
 
 cd /root
 git clone https://github.com/nekludoff/freebsd-nominatim-server.git
@@ -119,7 +71,7 @@ sysrc php_fpm_enable="YES"
 
 rm -r -f /usr/local/etc/nginx/*
 cp -r -f /root/freebsd-nominatim-server/conf/nginx/* /usr/local/etc/nginx
-rm -r -f /usr/local/etc/nginx/conf.d/nominatim-on-osm.conf
+rm -r -f /usr/local/etc/nginx/conf.d/nominatim.conf
 chown -R nominatim:nominatim /usr/local/etc/nginx
 service nginx start
 service nginx restart
