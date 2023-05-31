@@ -37,7 +37,6 @@ pkg install -y py39-psycopg2cffi-2.9.0.pkg
 pkg install -y postgresql15-contrib-15.3.pkg
 pkg install -y sfcgal-1.4.1_4.pkg
 pkg install -y gdal-3.6.4_1.pkg
-pkg install -y osm2pgsql-1.8.1_2.pkg
 pkg install -y postgresql15-server-15.3.pkg
 pkg install -y postgis33-3.3.2_4.pkg
 chown -R postgres:postgres /pgdb
