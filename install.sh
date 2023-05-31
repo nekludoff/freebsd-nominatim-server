@@ -55,7 +55,7 @@ service postgresql restart
 
 su - postgres -c "createuser nominatim"
 su - postgres -c "psql -c 'ALTER ROLE nominatim WITH SUPERUSER;'"
-su - postgres -c "www-data"
+su - postgres -c "createuser www-data"
 su - postgres -c "dropdb nominatim"
 cd /
 
