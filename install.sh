@@ -55,6 +55,7 @@ service postgresql restart
 
 su - postgres -c "createuser nominatim"
 su - postgres -c "psql -c 'ALTER ROLE nominatim WITH SUPERUSER;'"
+su - postgres -c "www-data"
 su - postgres -c "dropdb nominatim"
 cd /
 
@@ -67,16 +68,16 @@ pkg install -y php80-sqlite3 php80-sysvmsg php80-sysvsem php80-sysvshm php80-tid
 pkg install -y php80-xmlwriter php80-xsl php80-zip php80-zlib php80-pecl-igbinary
 pkg install -y autoconf
 
-sysrc nginx_enable="YES"
-service nginx start
-sysrc php_fpm_enable="YES"
-service php-fpm start
-
 cd /usr/ports/databases/php80-pdo_pgsql
 make reinstall clean
 cd /usr/ports/databases/php80-pgsql
 make reinstall clean
 cd /
+
+sysrc nginx_enable="YES"
+service nginx start
+sysrc php_fpm_enable="YES"
+service php-fpm start
 
 mkdir /home
 mkdir /home/nominatim
@@ -101,7 +102,7 @@ gmake install
 
 cd /root
 git clone https://github.com/nekludoff/freebsd-nominatim-server.git
-cp -r -f /root/freebsd-nominatim-server/conf/nominatim/ /usr/local/etc/nominatim/
+cp -r -f /root/freebsd-nominatim-server/conf/nominatim/.env /usr/local/etc/nominatim/.env
 
 mkdir /home/nominatim/flatnode
 mkdir /home/nominatim/nominatim-project
@@ -114,12 +115,17 @@ su - nominatim -c "cd /home/nominatim/nominatim-project; nominatim import --osm-
 mkdir /var/log/nginx
 chown -R nominatim:nominatim /var/log/nginx
 
+sysrc nginx_enable="YES"
+sysrc php_fpm_enable="YES"
+
 rm -r -f /usr/local/etc/nginx/*
 cp -r -f /root/freebsd-nominatim-server/conf/nginx/* /usr/local/etc/nginx
 chown -R nominatim:nominatim /usr/local/etc/nginx
+service nginx start
 service nginx restart
 
 rm -r -f /usr/local/etc/php-fpm.d/*
 cp -r -f /root/freebsd-nominatim-server/conf/php-fpm/* /usr/local/etc/php-fpm.d/
 chown -R nominatim:nominatim /usr/local/etc/php-fpm
+service php-fpm start
 service php-fpm restart
