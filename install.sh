@@ -28,6 +28,8 @@ pkg install -y libosmium icu py39-pyicu icu-le-hb harfbuzz-icu py39-pycapsicum p
 ln -s /usr/local/bin/python3.9 /usr/local/bin/python
 ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
 
+pip install sqlalchemy
+
 cd /root
 git clone https://github.com/nekludoff/freebsd-osm-tile-server.git
 cd freebsd-osm-tile-server/Postgresql-16

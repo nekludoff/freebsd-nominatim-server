@@ -22,6 +22,8 @@ pkg install -y php81-sqlite3 php81-sysvmsg php81-sysvsem php81-sysvshm php81-tid
 pkg install -y php81-xmlwriter php81-xsl php81-zip php81-zlib php81-pecl-igbinary
 pkg install -y autoconf
 
+pip install sqlalchemy
+
 cd /usr/ports/databases/php81-pdo_pgsql
 make reinstall clean
 cd /usr/ports/databases/php81-pgsql

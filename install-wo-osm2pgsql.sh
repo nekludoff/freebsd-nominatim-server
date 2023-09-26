@@ -70,6 +70,7 @@ pkg install -y php81-posix php81-pspell php81-readline php81-session php81-shmop
 pkg install -y php81-sqlite3 php81-sysvmsg php81-sysvsem php81-sysvshm php81-tidy php81-tokenizer php81-xml php81-xmlreader
 pkg install -y php81-xmlwriter php81-xsl php81-zip php81-zlib php81-pecl-igbinary
 pkg install -y autoconf
+pip install sqlalchemy
 
 cd /usr/ports/databases/php81-pdo_pgsql
 make reinstall clean
