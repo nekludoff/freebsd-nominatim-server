@@ -2,6 +2,7 @@
 cd /
 
 echo "DEFAULT_VERSIONS+=llvm=15" >> /etc/make.conf
+echo "DEFAULT_VERSIONS+=php=8.1" >> /etc/make.conf
 echo "DEFAULT_VERSIONS+=ssl=openssl" >> /etc/make.conf
 
 pkg install -y py39-pip py39-python-dotenv py39-psutil py39-Jinja2
@@ -13,17 +14,17 @@ su - postgres -c "createuser www-data"
 su - postgres -c "dropdb nominatim"
 
 pkg install -y nginx
-pkg install -y php80 php80-bcmath php80-mbstring php80-bz2 php80-calendar php80-ctype php80-curl php80-dom php80-enchant
-pkg install -y php80-exif php80-ffi php80-fileinfo php80-filter php80-ftp php80-gd php80-gettext php80-gmp php80-iconv
-pkg install -y php80-intl php80-opcache php80-pcntl php80-pdo php80-pdo_sqlite php80-phar
-pkg install -y php80-posix php80-pspell php80-readline php80-session php80-shmop php80-simplexml php80-sockets php80-sodium
-pkg install -y php80-sqlite3 php80-sysvmsg php80-sysvsem php80-sysvshm php80-tidy php80-tokenizer php80-xml php80-xmlreader
-pkg install -y php80-xmlwriter php80-xsl php80-zip php80-zlib php80-pecl-igbinary
+pkg install -y php81 php81-bcmath php81-mbstring php81-bz2 php81-calendar php81-ctype php81-curl php81-dom php81-enchant
+pkg install -y php81-exif php81-ffi php81-fileinfo php81-filter php81-ftp php81-gd php81-gettext php81-gmp php81-iconv
+pkg install -y php81-intl php81-opcache php81-pcntl php81-pdo php81-pdo_sqlite php81-phar
+pkg install -y php81-posix php81-pspell php81-readline php81-session php81-shmop php81-simplexml php81-sockets php81-sodium
+pkg install -y php81-sqlite3 php81-sysvmsg php81-sysvsem php81-sysvshm php81-tidy php81-tokenizer php81-xml php81-xmlreader
+pkg install -y php81-xmlwriter php81-xsl php81-zip php81-zlib php81-pecl-igbinary
 pkg install -y autoconf
 
-cd /usr/ports/databases/php80-pdo_pgsql
+cd /usr/ports/databases/php81-pdo_pgsql
 make reinstall clean
-cd /usr/ports/databases/php80-pgsql
+cd /usr/ports/databases/php81-pgsql
 make reinstall clean
 cd /
 
@@ -39,16 +40,16 @@ pw useradd nominatim -g nominatim -s /usr/local/bin/bash
 chown -R nominatim:nominatim /home/nominatim
 
 cd /home/nominatim
-wget https://nominatim.org/release/Nominatim-4.2.3.tar.bz2
-tar xf Nominatim-4.2.3.tar.bz2
-cd Nominatim-4.2.3
+wget https://www.nominatim.org/release/Nominatim-4.3.0.tar.bz2
+tar xf Nominatim-4.3.0.tar.bz2
+cd Nominatim-4.3.0
 rm -r -f osm2pgsql
 git clone https://github.com/openstreetmap/osm2pgsql.git
 wget -O data/country_osm_grid.sql.gz https://www.nominatim.org/data/country_grid.sql.gz
 wget -O data/central-fed-district-latest.osm.pbf http://download.geofabrik.de/russia/central-fed-district-latest.osm.pbf
 mkdir /home/nominatim/build
 cd /home/nominatim/build
-cmake -DBUILD_OSM2PGSQL=off /home/nominatim/Nominatim-4.2.3
+cmake -DBUILD_OSM2PGSQL=off /home/nominatim/Nominatim-4.3.0
 gmake
 gmake install
 ln -s /usr/local/bin/osm2pgsql /usr/local/lib/nominatim/osm2pgsql
@@ -62,13 +63,10 @@ mkdir /home/nominatim/nominatim-project
 cd /home/nominatim/nominatim-project
 chown -R nominatim:nominatim /home/nominatim
 
-su - nominatim -c "cd /home/nominatim/nominatim-project; nominatim import --osm-file /home/nominatim/Nominatim-4.2.3/data/central-fed-district-latest.osm.pbf 2>&1 | tee setup.log"
+su - nominatim -c "cd /home/nominatim/nominatim-project; nominatim import --osm-file /home/nominatim/Nominatim-4.3.0/data/central-fed-district-latest.osm.pbf 2>&1 | tee setup.log"
 
 mkdir /var/log/nginx
 chown -R nominatim:nominatim /var/log/nginx
-
-sysrc nginx_enable="YES"
-sysrc php_fpm_enable="YES"
 
 rm -r -f /usr/local/etc/nginx/*
 cp -r -f /root/freebsd-nominatim-server/conf/nginx/* /usr/local/etc/nginx

@@ -1,18 +1,18 @@
 #!/bin/sh
 cd /
 
-echo "DEFAULT_VERSIONS+=llvm=15" >> /etc/make.conf
+echo "DEFAULT_VERSIONS+=llvm=16" >> /etc/make.conf
 echo "DEFAULT_VERSIONS+=ssl=openssl" >> /etc/make.conf
 
 zfs destroy -r zroot/pgdb
 zfs create -o mountpoint=/pgdb zroot/pgdb
 zfs create -o mountpoint=/pgdb/data zroot/pgdb/data
 cd /pgdb/data
-mkdir 15
+mkdir 16
 zfs set recordsize=32k zroot/pgdb/data
 zfs create -o mountpoint=/pgdb/wal zroot/pgdb/wal
 cd /pgdb/wal
-mkdir 15
+mkdir 16
 zfs set recordsize=64k zroot/pgdb/wal
 zfs set compression=lz4 zroot/pgdb
 zfs set atime=off zroot/pgdb
@@ -30,28 +30,29 @@ ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
 
 cd /root
 git clone https://github.com/nekludoff/freebsd-osm-tile-server.git
-cd freebsd-osm-tile-server/Postgresql-15
+cd freebsd-osm-tile-server/Postgresql-16
 
-pkg install -y postgresql15-client-15.3.pkg
-pkg install -y py39-psycopg-c-3.1.9.pkg
-pkg install -y py39-psycopg-3.1.9.pkg
-pkg install -y py39-psycopg2-2.9.6.pkg
+pkg install -y postgresql16-client-16.0.pkg
+pkg install -y py39-psycopg-c-3.1.10.pkg
+pkg install -y py39-psycopg-3.1.10.pkg
+pkg install -y py39-psycopg2-2.9.7.pkg
 pkg install -y py39-psycopg2cffi-2.9.0.pkg
-pkg install -y postgresql15-contrib-15.3.pkg
+pkg install -y postgresql16-contrib-16.0.pkg
 pkg install -y sfcgal-1.4.1_4.pkg
-pkg install -y gdal-3.6.4_1.pkg
-pkg install -y postgresql15-server-15.3.pkg
-pkg install -y postgis33-3.3.2_4.pkg
+pkg install -y gdal-3.7.2.pkg
+pkg install -y osm2pgsql-1.9.2.pkg
+pkg install -y postgresql16-server-16.0.pkg
+pkg install -y postgis33-3.3.4.pkg
 chown -R postgres:postgres /pgdb
 
 sysrc postgresql_enable="YES"
 cp -f postgresql /usr/local/etc/rc.d/postgresql
 chmod 755 /usr/local/etc/rc.d/postgresql
 /usr/local/etc/rc.d/postgresql initdb
-mv -f /pgdb/data/15/pg_wal /pgdb/wal/15
-ln -s /pgdb/wal/15/pg_wal /pgdb/data/15/pg_wal
-cp -f pg_hba.conf /pgdb/data/15/pg_hba.conf
-cp -f postgresql.conf /pgdb/data/15/postgresql.conf
+mv -f /pgdb/data/16/pg_wal /pgdb/wal/16
+ln -s /pgdb/wal/16/pg_wal /pgdb/data/16/pg_wal
+cp -f pg_hba.conf /pgdb/data/16/pg_hba.conf
+cp -f postgresql.conf /pgdb/data/16/postgresql.conf
 service postgresql start
 service postgresql restart
 
@@ -62,17 +63,17 @@ su - postgres -c "dropdb nominatim"
 cd /
 
 pkg install -y nginx
-pkg install -y php80 php80-bcmath php80-mbstring php80-bz2 php80-calendar php80-ctype php80-curl php80-dom php80-enchant
-pkg install -y php80-exif php80-ffi php80-fileinfo php80-filter php80-ftp php80-gd php80-gettext php80-gmp php80-iconv
-pkg install -y php80-intl php80-opcache php80-pcntl php80-pdo php80-pdo_sqlite php80-phar
-pkg install -y php80-posix php80-pspell php80-readline php80-session php80-shmop php80-simplexml php80-sockets php80-sodium
-pkg install -y php80-sqlite3 php80-sysvmsg php80-sysvsem php80-sysvshm php80-tidy php80-tokenizer php80-xml php80-xmlreader
-pkg install -y php80-xmlwriter php80-xsl php80-zip php80-zlib php80-pecl-igbinary
+pkg install -y php81 php81-bcmath php81-mbstring php81-bz2 php81-calendar php81-ctype php81-curl php81-dom php81-enchant
+pkg install -y php81-exif php81-ffi php81-fileinfo php81-filter php81-ftp php81-gd php81-gettext php81-gmp php81-iconv
+pkg install -y php81-intl php81-opcache php81-pcntl php81-pdo php81-pdo_sqlite php81-phar
+pkg install -y php81-posix php81-pspell php81-readline php81-session php81-shmop php81-simplexml php81-sockets php81-sodium
+pkg install -y php81-sqlite3 php81-sysvmsg php81-sysvsem php81-sysvshm php81-tidy php81-tokenizer php81-xml php81-xmlreader
+pkg install -y php81-xmlwriter php81-xsl php81-zip php81-zlib php81-pecl-igbinary
 pkg install -y autoconf
 
-cd /usr/ports/databases/php80-pdo_pgsql
+cd /usr/ports/databases/php81-pdo_pgsql
 make reinstall clean
-cd /usr/ports/databases/php80-pgsql
+cd /usr/ports/databases/php81-pgsql
 make reinstall clean
 cd /
 
