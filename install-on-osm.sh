@@ -1,7 +1,7 @@
 #!/bin/sh
 cd /
 
-echo "DEFAULT_VERSIONS+=llvm=15" >> /etc/make.conf
+echo "DEFAULT_VERSIONS+=llvm=16" >> /etc/make.conf
 echo "DEFAULT_VERSIONS+=php=8.1" >> /etc/make.conf
 echo "DEFAULT_VERSIONS+=ssl=openssl" >> /etc/make.conf
 
