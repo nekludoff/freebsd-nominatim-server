@@ -5,6 +5,8 @@ echo "DEFAULT_VERSIONS+=llvm=16" >> /etc/make.conf
 echo "DEFAULT_VERSIONS+=php=8.1" >> /etc/make.conf
 echo "DEFAULT_VERSIONS+=ssl=openssl" >> /etc/make.conf
 
+pkg install -y portsnap
+portsnap auto
 pkg install -y py39-pip py39-python-dotenv py39-psutil py39-Jinja2
 pkg install -y libosmium icu py39-pyicu icu-le-hb harfbuzz-icu py39-pycapsicum py39-datrie libdatrie autoconf
 

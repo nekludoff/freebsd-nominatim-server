@@ -20,6 +20,8 @@ zfs set xattr=sa zroot/pgdb
 zfs set logbias=latency zroot/pgdb
 zfs set redundant_metadata=most zroot/pgdb
 
+pkg install -y portsnap
+portsnap auto
 pkg install -y git sudo wget npm nano
 pkg install -y llvm15 lua54 
 pkg install -y mc nano bash apache24 boost-all cairo ceph14 cmake coreutils curl freetype2 glib gmake harfbuzz icu iniparser libjpeg-turbo libmemcached png proj python39 sqlite3 tiff webp zlib-ng bzip
