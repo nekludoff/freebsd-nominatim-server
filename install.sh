@@ -93,7 +93,7 @@ pw useradd nominatim -g nominatim -s /usr/local/bin/bash
 chown -R nominatim:nominatim /home/nominatim
 
 cd /home/nominatim
-wget https://nominatim.org/release/Nominatim-4.2.3.tar.bz2
+wget https://nominatim.org/release/Nominatim-4.3.2.tar.bz2
 tar xf Nominatim-4.2.3.tar.bz2
 cd Nominatim-4.2.3
 rm -r -f osm2pgsql
@@ -103,7 +103,7 @@ wget -O data/country_osm_grid.sql.gz https://www.nominatim.org/data/country_grid
 wget -O data/andorra-latest.osm.pbf https://download.geofabrik.de/europe/andorra-latest.osm.pbf
 mkdir /home/nominatim/build
 cd /home/nominatim/build
-cmake /home/nominatim/Nominatim-4.2.3
+cmake /home/nominatim/Nominatim-4.3.2
 gmake
 gmake install
 
@@ -117,7 +117,7 @@ cd /home/nominatim/nominatim-project
 chown -R nominatim:nominatim /home/nominatim
 
 #su - nominatim -c "cd /home/nominatim/nominatim-project; nominatim import --osm-file /home/nominatim/Nominatim-4.2.3/data/central-fed-district-latest.osm.pbf 2>&1 | tee setup.log"
-su - nominatim -c "cd /home/nominatim/nominatim-project; nominatim import --osm-file /home/nominatim/Nominatim-4.2.3/data/andorra-latest.osm.pbf 2>&1 | tee setup.log"
+su - nominatim -c "cd /home/nominatim/nominatim-project; nominatim import --osm-file /home/nominatim/Nominatim-4.3.2/data/andorra-latest.osm.pbf 2>&1 | tee setup.log"
 
 mkdir /var/log/nginx
 chown -R nominatim:nominatim /var/log/nginx

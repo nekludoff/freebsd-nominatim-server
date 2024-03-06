@@ -44,16 +44,16 @@ pw useradd nominatim -g nominatim -s /usr/local/bin/bash
 chown -R nominatim:nominatim /home/nominatim
 
 cd /home/nominatim
-wget https://www.nominatim.org/release/Nominatim-4.3.0.tar.bz2
-tar xf Nominatim-4.3.0.tar.bz2
-cd Nominatim-4.3.0
+wget https://www.nominatim.org/release/Nominatim-4.3.2.tar.bz2
+tar xf Nominatim-4.3.2.tar.bz2
+cd Nominatim-4.3.2
 rm -r -f osm2pgsql
 git clone https://github.com/openstreetmap/osm2pgsql.git
 wget -O data/country_osm_grid.sql.gz https://www.nominatim.org/data/country_grid.sql.gz
 wget -O data/central-fed-district-latest.osm.pbf http://download.geofabrik.de/russia/central-fed-district-latest.osm.pbf
 mkdir /home/nominatim/build
 cd /home/nominatim/build
-cmake -DBUILD_OSM2PGSQL=off /home/nominatim/Nominatim-4.3.0
+cmake -DBUILD_OSM2PGSQL=off /home/nominatim/Nominatim-4.3.2
 gmake
 gmake install
 ln -s /usr/local/bin/osm2pgsql /usr/local/lib/nominatim/osm2pgsql
@@ -67,7 +67,7 @@ mkdir /home/nominatim/nominatim-project
 cd /home/nominatim/nominatim-project
 chown -R nominatim:nominatim /home/nominatim
 
-su - nominatim -c "cd /home/nominatim/nominatim-project; nominatim import --osm-file /home/nominatim/Nominatim-4.3.0/data/central-fed-district-latest.osm.pbf 2>&1 | tee setup.log"
+su - nominatim -c "cd /home/nominatim/nominatim-project; nominatim import --osm-file /home/nominatim/Nominatim-4.3.2/data/central-fed-district-latest.osm.pbf 2>&1 | tee setup.log"
 
 mkdir /var/log/nginx
 chown -R nominatim:nominatim /var/log/nginx
