@@ -44,9 +44,9 @@ pw useradd nominatim -g nominatim -s /usr/local/bin/bash
 chown -R nominatim:nominatim /home/nominatim
 
 cd /home/nominatim
-wget https://www.nominatim.org/release/Nominatim-4.3.2.tar.bz2
-tar xf Nominatim-4.3.2.tar.bz2
-cd Nominatim-4.3.2
+wget https://www.nominatim.org/release/Nominatim-4.4.0.tar.bz2
+tar Nominatim-4.4.0.tar.bz2
+cd Nominatim-4.4.0
 rm -r -f osm2pgsql
 git clone https://github.com/openstreetmap/osm2pgsql.git
 wget -O data/country_osm_grid.sql.gz https://www.nominatim.org/data/country_grid.sql.gz
