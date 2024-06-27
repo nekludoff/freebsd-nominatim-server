@@ -129,6 +129,8 @@ chown -R nominatim:nominatim /usr/local/etc/nginx
 service nginx start
 service nginx restart
 
+cp -r -f /root/freebsd-nominatim-server/conf/php/php.ini /usr/local/etc
+
 rm -r -f /usr/local/etc/php-fpm.d/*
 cp -r -f /root/freebsd-nominatim-server/conf/php-fpm/* /usr/local/etc/php-fpm.d/
 chown -R nominatim:nominatim /usr/local/etc/php-fpm
