@@ -2,7 +2,7 @@
 cd /
 
 echo "DEFAULT_VERSIONS+=llvm=16" >> /etc/make.conf
-echo "DEFAULT_VERSIONS+=php=8.1" >> /etc/make.conf
+echo "DEFAULT_VERSIONS+=php=8.3" >> /etc/make.conf
 echo "DEFAULT_VERSIONS+=ssl=openssl" >> /etc/make.conf
 
 pkg install -y portsnap
@@ -16,19 +16,19 @@ su - postgres -c "createuser www-data"
 su - postgres -c "dropdb nominatim"
 
 pkg install -y nginx
-pkg install -y php81 php81-bcmath php81-mbstring php81-bz2 php81-calendar php81-ctype php81-curl php81-dom php81-enchant
-pkg install -y php81-exif php81-ffi php81-fileinfo php81-filter php81-ftp php81-gd php81-gettext php81-gmp php81-iconv
-pkg install -y php81-intl php81-opcache php81-pcntl php81-pdo php81-pdo_sqlite php81-phar
-pkg install -y php81-posix php81-pspell php81-readline php81-session php81-shmop php81-simplexml php81-sockets php81-sodium
-pkg install -y php81-sqlite3 php81-sysvmsg php81-sysvsem php81-sysvshm php81-tidy php81-tokenizer php81-xml php81-xmlreader
-pkg install -y php81-xmlwriter php81-xsl php81-zip php81-zlib php81-pecl-igbinary
+pkg install -y php83 php83-bcmath php83-mbstring php83-bz2 php83-calendar php83-ctype php83-curl php83-dom php83-enchant
+pkg install -y php83-exif php83-ffi php83-fileinfo php83-filter php83-ftp php83-gd php83-gettext php83-gmp php83-iconv
+pkg install -y php83-intl php83-opcache php83-pcntl php83-pdo php83-pdo_sqlite php83-phar
+pkg install -y php83-posix php83-pspell php83-readline php83-session php83-shmop php83-simplexml php83-sockets php83-sodium
+pkg install -y php83-sqlite3 php83-sysvmsg php83-sysvsem php83-sysvshm php83-tidy php83-tokenizer php83-xml php83-xmlreader
+pkg install -y php83-xmlwriter php83-xsl php83-zip php83-zlib php83-pecl-igbinary
 pkg install -y autoconf
 
 pip install sqlalchemy
 
-cd /usr/ports/databases/php81-pdo_pgsql
+cd /usr/ports/databases/php83-pdo_pgsql
 make reinstall clean
-cd /usr/ports/databases/php81-pgsql
+cd /usr/ports/databases/php83-pgsql
 make reinstall clean
 cd /
 
