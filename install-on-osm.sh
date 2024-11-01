@@ -7,8 +7,8 @@ echo "DEFAULT_VERSIONS+=ssl=openssl" >> /etc/make.conf
 
 pkg install -y portsnap
 portsnap auto
-pkg install -y py39-pip py39-python-dotenv py39-psutil py39-Jinja2
-pkg install -y libosmium icu py39-pyicu icu-le-hb harfbuzz-icu py39-pycapsicum py39-datrie libdatrie autoconf
+pkg install -y py311-pip py311-python-dotenv py311-psutil py311-Jinja2
+pkg install -y libosmium icu py311-pyicu icu-le-hb harfbuzz-icu py311-pycapsicum py311-datrie libdatrie autoconf
 
 su - postgres -c "createuser nominatim"
 su - postgres -c "psql -c 'ALTER ROLE nominatim WITH SUPERUSER;'"
